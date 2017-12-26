@@ -35,7 +35,18 @@ test_df.head(3)
 # Predict with "Random Forest"
 train_data = train_df.values
 test_data = test_df.values
-model = RandomForestClassifier(n_estimators=100)
+
+#パラメータの最適化
+parameters = {
+        'n_estimators'      : [5, 10, 20, 30, 50, 100, 300, 500, 750, 1000],
+        'max_features'      : [3, 5, 10, 15, 20],
+        'random_state'      : [0],
+        'n_jobs'            : [1],
+        'min_samples_split' : [3, 5, 10, 15, 20, 25, 30, 40, 50, 100],
+        'max_depth'         : [3, 5, 10, 15, 20, 25, 30, 40, 50, 100]
+}
+
+model = grid_search.GridSearchCV(RandomForestClassifier(), parameters)
 output = model.fit(train_data[0::, 1::], train_data[0::, 0]).predict(test_data).astype(int)
 
 # export result to be "titanic_submit.csv"
